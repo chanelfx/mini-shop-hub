@@ -1,0 +1,25 @@
+{
+  "name": "Mini Shop",
+  "short_name": "Mini Shop",
+  "description": "Work management and financial reporting for Mini Shop. Developed by Chanel.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0ب0d",
+  "theme_color": "#dc2626",
+  "icons": [
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
