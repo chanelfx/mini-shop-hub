@@ -14,16 +14,345 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      business_settings: {
+        Row: {
+          boss_percentage: number
+          currency: string
+          employee_percentage: number
+          id: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          boss_percentage?: number
+          currency?: string
+          employee_percentage?: number
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          boss_percentage?: number
+          currency?: string
+          employee_percentage?: number
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      day_closures: {
+        Row: {
+          business_date: string
+          closed_at: string
+          closed_by: string
+          id: string
+        }
+        Insert: {
+          business_date: string
+          closed_at?: string
+          closed_by: string
+          id?: string
+        }
+        Update: {
+          business_date?: string
+          closed_at?: string
+          closed_by?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      edit_requests: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          requested_by: string
+          requested_changes: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["request_status"]
+          transaction_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          requested_by: string
+          requested_changes?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          transaction_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          requested_by?: string
+          requested_changes?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          transaction_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "edit_requests_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          must_change_password: boolean
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string
+          id: string
+          must_change_password?: boolean
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          must_change_password?: boolean
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          airtime_cost: number
+          boss_amount: number
+          boss_percentage: number
+          business_date: string
+          created_at: string
+          created_by: string
+          deleted_at: string | null
+          deleted_by: string | null
+          deletion_reason: string | null
+          edit_unlocked: boolean
+          employee_amount: number
+          employee_percentage: number
+          gross_amount: number
+          id: string
+          is_locked: boolean
+          net_amount: number
+          notes: string | null
+          quantity: number
+          status: string
+          transaction_type: Database["public"]["Enums"]["txn_type"]
+          unit_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          airtime_cost?: number
+          boss_amount?: number
+          boss_percentage?: number
+          business_date?: string
+          created_at?: string
+          created_by?: string
+          deleted_at?: string | null
+          deleted_by?: string | null
+          deletion_reason?: string | null
+          edit_unlocked?: boolean
+          employee_amount?: number
+          employee_percentage?: number
+          gross_amount?: number
+          id?: string
+          is_locked?: boolean
+          net_amount?: number
+          notes?: string | null
+          quantity: number
+          status?: string
+          transaction_type: Database["public"]["Enums"]["txn_type"]
+          unit_price: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          airtime_cost?: number
+          boss_amount?: number
+          boss_percentage?: number
+          business_date?: string
+          created_at?: string
+          created_by?: string
+          deleted_at?: string | null
+          deleted_by?: string | null
+          deletion_reason?: string | null
+          edit_unlocked?: boolean
+          employee_amount?: number
+          employee_percentage?: number
+          gross_amount?: number
+          id?: string
+          is_locked?: boolean
+          net_amount?: number
+          notes?: string | null
+          quantity?: number
+          status?: string
+          transaction_type?: Database["public"]["Enums"]["txn_type"]
+          unit_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_boss: { Args: never; Returns: boolean }
+      setup_status: {
+        Args: never
+        Returns: {
+          has_boss: boolean
+          has_employee: boolean
+        }[]
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "employee" | "boss"
+      request_status: "pending" | "approved" | "rejected"
+      txn_type: "new_sim" | "sim_swap" | "movies_songs" | "phone_software"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +479,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["employee", "boss"],
+      request_status: ["pending", "approved", "rejected"],
+      txn_type: ["new_sim", "sim_swap", "movies_songs", "phone_software"],
+    },
   },
 } as const
