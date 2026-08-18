@@ -5,9 +5,11 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
+import { getSetupStatus, createInitialAccounts } from "@/lib/setup.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -28,10 +30,31 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [needsSetup, setNeedsSetup] = useState(false);
+  const [created, setCreated] = useState<{ email: string; password: string; role: string }[]>([]);
 
   useEffect(() => {
     if (!loading && session) void router.navigate({ to: "/" });
   }, [loading, session, router]);
+
+  useEffect(() => {
+    void getSetupStatus().then((r) => setNeedsSetup(r.needsSetup)).catch(() => {});
+  }, []);
+
+  const runSetup = async () => {
+    setBusy(true);
+    try {
+      const r = await createInitialAccounts();
+      setCreated(r.accounts);
+      setNeedsSetup(false);
+      toast.success("Accounts created");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Setup failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,9 +140,41 @@ function AuthPage() {
         <Button type="submit" className="mt-6 w-full" disabled={busy}>
           {busy ? "Signing in…" : "Sign in"}
         </Button>
+        {needsSetup ? (
+          <div className="mt-4 rounded-2xl bg-accent/40 p-3 text-center">
+            <p className="text-xs text-muted-foreground">
+              No accounts exist yet. Create the Chanel and Boss accounts.
+            </p>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="mt-2 w-full"
+              disabled={busy}
+              onClick={() => void runSetup()}
+            >
+              Create accounts
+            </Button>
+          </div>
+        ) : null}
+
+        {created.length > 0 ? (
+          <div className="mt-4 rounded-2xl bg-accent/40 p-3 text-xs">
+            <p className="font-semibold">Sign-in details</p>
+            <ul className="mt-1 space-y-1 text-muted-foreground">
+              {created.map((a) => (
+                <li key={a.email}>
+                  <span className="capitalize">{a.role}</span>: {a.email} / {a.password}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
         <p className="mt-4 text-center text-xs text-muted-foreground">
           Accounts are created by management only.
         </p>
+
       </form>
     </div>
   );
