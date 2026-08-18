@@ -47,6 +47,10 @@ export const Route = createFileRoute("/transactions")({
 
 function TransactionsPage() {
   const { user, isBoss } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (isBoss) void router.navigate({ to: "/reports" });
+  }, [isBoss, router]);
   const [date, setDate] = useState(todayKey());
   const [type, setType] = useState<TxnType>("new_sim");
   const [quantity, setQuantity] = useState("1");
