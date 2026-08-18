@@ -40,7 +40,10 @@ export function AppShell({
   action?: ReactNode;
   children: ReactNode;
 }) {
-  const { profile, signOut, loading, session } = useAuth();
+  const { profile, signOut, loading, session, isBoss } = useAuth();
+  const nav: readonly { to: string; label: string; icon: typeof Home }[] = isBoss
+    ? BOSS_NAV
+    : EMPLOYEE_NAV;
   const { theme, setTheme } = useTheme();
   const router = useRouter();
 
