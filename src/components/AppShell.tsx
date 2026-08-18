@@ -88,10 +88,10 @@ export function AppShell({
 
       <nav className="glass safe-bottom fixed inset-x-0 bottom-0 z-30 rounded-t-3xl px-2 pt-2">
         <div className="mx-auto flex max-w-3xl items-stretch justify-between">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <Link
               key={n.to}
-              to={n.to}
+              to={n.to as "/"}
               className="flex flex-1 flex-col items-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium text-muted-foreground transition-colors"
               activeOptions={{ exact: n.to === "/" }}
               activeProps={{ className: "text-primary bg-accent/60" }}
