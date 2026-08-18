@@ -61,16 +61,23 @@ function Dashboard() {
       </section>
 
       <div className="mt-4 flex gap-2">
-        <Button asChild className="flex-1">
-          <Link to="/transactions">
-            <PlusCircle className="size-4" /> Record a sale
-          </Link>
-        </Button>
-        <Button asChild variant="secondary" className="flex-1">
+        {isBoss ? null : (
+          <Button asChild className="flex-1">
+            <Link to="/transactions">
+              <PlusCircle className="size-4" /> Record a sale
+            </Link>
+          </Button>
+        )}
+        <Button asChild variant={isBoss ? "default" : "secondary"} className="flex-1">
           <Link to="/reports">
             <TrendingUp className="size-4" /> Reports
           </Link>
         </Button>
+        {isBoss ? (
+          <Button asChild variant="secondary" className="flex-1">
+            <Link to="/messages">Chats</Link>
+          </Button>
+        ) : null}
       </div>
 
       <h2 className="mt-6 mb-2 text-sm font-semibold text-muted-foreground">Today by category</h2>
