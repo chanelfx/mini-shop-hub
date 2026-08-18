@@ -140,9 +140,41 @@ function AuthPage() {
         <Button type="submit" className="mt-6 w-full" disabled={busy}>
           {busy ? "Signing in…" : "Sign in"}
         </Button>
+        {needsSetup ? (
+          <div className="mt-4 rounded-2xl bg-accent/40 p-3 text-center">
+            <p className="text-xs text-muted-foreground">
+              No accounts exist yet. Create the Chanel and Boss accounts.
+            </p>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="mt-2 w-full"
+              disabled={busy}
+              onClick={() => void runSetup()}
+            >
+              Create accounts
+            </Button>
+          </div>
+        ) : null}
+
+        {created.length > 0 ? (
+          <div className="mt-4 rounded-2xl bg-accent/40 p-3 text-xs">
+            <p className="font-semibold">Sign-in details</p>
+            <ul className="mt-1 space-y-1 text-muted-foreground">
+              {created.map((a) => (
+                <li key={a.email}>
+                  <span className="capitalize">{a.role}</span>: {a.email} / {a.password}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
         <p className="mt-4 text-center text-xs text-muted-foreground">
           Accounts are created by management only.
         </p>
+
       </form>
     </div>
   );
