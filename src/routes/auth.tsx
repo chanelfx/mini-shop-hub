@@ -30,10 +30,31 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [needsSetup, setNeedsSetup] = useState(false);
+  const [created, setCreated] = useState<{ email: string; password: string; role: string }[]>([]);
 
   useEffect(() => {
     if (!loading && session) void router.navigate({ to: "/" });
   }, [loading, session, router]);
+
+  useEffect(() => {
+    void getSetupStatus().then((r) => setNeedsSetup(r.needsSetup)).catch(() => {});
+  }, []);
+
+  const runSetup = async () => {
+    setBusy(true);
+    try {
+      const r = await createInitialAccounts();
+      setCreated(r.accounts);
+      setNeedsSetup(false);
+      toast.success("Accounts created");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Setup failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
