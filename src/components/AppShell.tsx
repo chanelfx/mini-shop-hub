@@ -14,9 +14,16 @@ import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
 import { Button } from "@/components/ui/button";
 
-const NAV = [
+const EMPLOYEE_NAV = [
   { to: "/", label: "Home", icon: Home },
   { to: "/transactions", label: "Sales", icon: Receipt },
+  { to: "/reports", label: "Reports", icon: BarChart3 },
+  { to: "/messages", label: "Chat", icon: MessageSquare },
+  { to: "/settings", label: "More", icon: Settings },
+] as const;
+
+const BOSS_NAV = [
+  { to: "/", label: "Home", icon: Home },
   { to: "/reports", label: "Reports", icon: BarChart3 },
   { to: "/messages", label: "Chat", icon: MessageSquare },
   { to: "/settings", label: "More", icon: Settings },
@@ -33,7 +40,10 @@ export function AppShell({
   action?: ReactNode;
   children: ReactNode;
 }) {
-  const { profile, signOut, loading, session } = useAuth();
+  const { profile, signOut, loading, session, isBoss } = useAuth();
+  const nav: readonly { to: string; label: string; icon: typeof Home }[] = isBoss
+    ? BOSS_NAV
+    : EMPLOYEE_NAV;
   const { theme, setTheme } = useTheme();
   const router = useRouter();
 
@@ -78,10 +88,10 @@ export function AppShell({
 
       <nav className="glass safe-bottom fixed inset-x-0 bottom-0 z-30 rounded-t-3xl px-2 pt-2">
         <div className="mx-auto flex max-w-3xl items-stretch justify-between">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <Link
               key={n.to}
-              to={n.to}
+              to={n.to as "/"}
               className="flex flex-1 flex-col items-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium text-muted-foreground transition-colors"
               activeOptions={{ exact: n.to === "/" }}
               activeProps={{ className: "text-primary bg-accent/60" }}

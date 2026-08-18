@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Lock, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -47,6 +47,10 @@ export const Route = createFileRoute("/transactions")({
 
 function TransactionsPage() {
   const { user, isBoss } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (isBoss) void router.navigate({ to: "/reports" });
+  }, [isBoss, router]);
   const [date, setDate] = useState(todayKey());
   const [type, setType] = useState<TxnType>("new_sim");
   const [quantity, setQuantity] = useState("1");
