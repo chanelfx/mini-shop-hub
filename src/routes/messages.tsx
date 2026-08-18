@@ -47,9 +47,14 @@ function Messages() {
 
   const send = async () => {
     const body = text.trim();
-    if (!body || !user) return;
+    const receiver = (profiles.data ?? []).find(
+      (p) => (p as { id: string }).id !== user?.id,
+    ) as { id: string } | undefined;
+    if (!body || !user || !receiver) return;
     setSending(true);
-    const { error } = await supabase.from("messages").insert({ sender_id: user.id, body });
+    const { error } = await supabase
+      .from("messages")
+      .insert({ sender_id: user.id, receiver_id: receiver.id, message: body });
     setSending(false);
     if (error) {
       toast.error(error.message);
@@ -68,7 +73,7 @@ function Messages() {
           </p>
         ) : null}
         {rows.map((m) => {
-          const msg = m as { id: string; sender_id: string; body: string; created_at: string };
+          const msg = m as { id: string; sender_id: string; message: string; created_at: string };
           const mine = msg.sender_id === user?.id;
           return (
             <div key={msg.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
@@ -82,7 +87,7 @@ function Messages() {
                     {nameOf(msg.sender_id)}
                   </p>
                 ) : null}
-                <p className="text-sm whitespace-pre-wrap break-words">{msg.body}</p>
+                <p className="text-sm whitespace-pre-wrap break-words">{msg.message}</p>
                 <p className="mt-1 text-[10px] text-muted-foreground">
                   {new Date(msg.created_at).toLocaleTimeString([], {
                     hour: "2-digit",
