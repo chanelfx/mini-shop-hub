@@ -14,9 +14,16 @@ import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
 import { Button } from "@/components/ui/button";
 
-const NAV = [
+const EMPLOYEE_NAV = [
   { to: "/", label: "Home", icon: Home },
   { to: "/transactions", label: "Sales", icon: Receipt },
+  { to: "/reports", label: "Reports", icon: BarChart3 },
+  { to: "/messages", label: "Chat", icon: MessageSquare },
+  { to: "/settings", label: "More", icon: Settings },
+] as const;
+
+const BOSS_NAV = [
+  { to: "/", label: "Home", icon: Home },
   { to: "/reports", label: "Reports", icon: BarChart3 },
   { to: "/messages", label: "Chat", icon: MessageSquare },
   { to: "/settings", label: "More", icon: Settings },
